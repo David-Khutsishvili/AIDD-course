@@ -25,13 +25,42 @@
 |---|---|---|
 | 2026-11-22 | Main PC | Environment check, Step 0 (git config fixes). |
 | 2026-11-25 | Main PC | Steps 1–2 done. Step 3: scaffold + `CLAUDE.md` commits pushed to `main`. |
-| 2026-11-25 | Second PC | Cloned the repo. `npm ci`, `npm run lint` and `npm run build` all pass. Moved this plan into the repo (`docs/plan1.md`). Added Step 4.5 (CI). Step 4 (Vercel) in progress. |
+| 2026-11-25 | Second PC | Cloned the repo. `npm ci`, `npm run lint` and `npm run build` all pass. Moved this plan into the repo (`docs/plan1.md`). Added Step 4.5 (CI). |
+| 2026-11-25/26 | Second PC | **Step 4 done.** Imported the repo into Vercel and triggered the first production deploy by hand. Live at **https://aidd-course.vercel.app**. Commit `05c6edd` on `main` has a ✅ Vercel status on GitHub. Docs updated on branch `docs/progress-and-ci-plan`. |
 
 **Current status:**
 - ✅ Steps 0–2 done.
 - 🟡 Step 3: commits are pushed, but the **`protect-main` ruleset and the squash-only merge settings are not set yet**. GitHub reports no rules on `main`. Do this on the main PC (it has `gh` installed).
-- 🟡 Step 4: in progress on the second PC.
+- ✅ Step 4: production deploy live at https://aidd-course.vercel.app.
 - ⬜ Step 4.5 (CI), Step 5 and Step 6: not started.
+
+### ▶ Next session: start here (main PC)
+
+**1. Second PC, before leaving:** push the docs branch. Everything is already committed.
+```powershell
+git push        # the branch already tracks origin/docs/progress-and-ci-plan
+```
+
+**2. On GitHub, open and merge the PR.** This is a small rehearsal of Step 5.
+- Go to https://github.com/David-Khutsishvili/AIDD-course/pull/new/docs/progress-and-ci-plan and create the PR.
+- Wait for the **Vercel bot's preview link** on the PR. This is the first preview deployment, because Vercel wasn't connected yet when the branch was first pushed. Open the link: it should show the same default page, since only docs changed.
+- Review **Files changed**, then merge with **"Squash and merge"**. Pick it from the dropdown on the merge button: merge settings aren't configured yet (Step 3b), so GitHub may default to "Create a merge commit".
+- Click **Delete branch** if GitHub offers it. Vercel then redeploys production from the new `main`.
+
+**3. Main PC: sync.**
+```powershell
+git switch main
+git pull                  # gets docs/plan1.md and the updated CLAUDE.md
+npm ci                    # exact dependencies from package-lock.json
+```
+- Delete the **old `plan1.md` in the course folder** (outside the repo). From now on, `docs/plan1.md` is the only copy.
+- If an old local branch exists (`git branch` lists it), delete it with `git branch -D docs/progress-and-ci-plan`.
+
+**4. Main PC: finish Step 3b.** Set up the `protect-main` ruleset and the squash-only merge settings, as described in Step 3 below. `gh` is available on the main PC.
+
+**5. Check Vercel's Node.js version.** Look in Vercel → aidd-course → **Settings → Build and Deployment → Node.js Version** and write it here. Step 4.5 pins one Node version for both PCs, CI and Vercel.
+
+**6. Start Step 4.5 (CI + tests).** It begins as a lesson, with explanations only and no file changes. A concrete plan gets approved before anything is created.
 
 **Naming note:** this plan was written before the repo existed, and its examples use `code/` and `ai-course-web`. The real names are:
 - GitHub repo: `David-Khutsishvili/AIDD-course`
@@ -237,6 +266,16 @@ git push -u origin main
 
 **Doing this before Step 3 is finished is fine.** Vercel only needs read access to the repo. The ruleset only controls who can push to `main`, and Vercel never pushes.
 
+**Gotcha we hit (2026-11-25):** after the import, the project was connected to GitHub (✓ "Connect Git Repository"), but the Overview said **"No Production Deployment"**. Vercel deploys only when a new commit is pushed, so connecting the repo alone built nothing. The fix doesn't need a commit to `main`: **Deployments → ⋯ (top right) → Create Deployment → branch `main`**.
+
+**Where the build settings are:** the "Deployment Settings" panel on the Overview page only shows build-machine options. Framework Preset, Build/Install/Output commands, Root Directory and **Node.js Version** are under **Project → Settings → Build and Deployment**.
+
+**Domains vs. deployment URLs (from the Overview page):**
+- **Domains:** `aidd-course.vercel.app` is the production domain. It always serves the latest `main`, so share this one.
+- **Deployment:** `aidd-course-f3yx6y6ig-david-khutsishvilis-projects.vercel.app` is a frozen snapshot of that single deploy. **Instant Rollback** can point the domain back to an older snapshot.
+
+**Result:** ✅ live at **https://aidd-course.vercel.app**, deployed from `main` @ `05c6edd`, status Ready.
+
 **What to check after deploying:**
 - The build log in Vercel shows the same steps as your local `npm run build`.
 - The production URL loads the default Next.js page.
@@ -355,7 +394,7 @@ Share the short production domain (`ai-course-web.vercel.app`). Don't use the lo
 - [x] Step 2: Next.js app scaffolded, runs at localhost:3000
 - [x] Step 3a: scaffold + CLAUDE.md commits pushed
 - [ ] Step 3b: `protect-main` ruleset + squash-only merge settings (**on the main PC**)
-- [ ] Step 4: Vercel project imported and production deploy live
+- [x] Step 4: Vercel project imported and production deploy live: https://aidd-course.vercel.app
 - [ ] Step 4.5: CI workflow (lint, type-check, format, tests, build) + testing platform, and required in the ruleset
 - [ ] Step 5: branch → PR → preview → squash merge → production updated
 - [ ] Step 6: live URL posted in the group

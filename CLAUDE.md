@@ -10,10 +10,10 @@ The `@AGENTS.md` line above imports the Next.js-generated agent rules: **read th
 A professional **Next.js** web app, built throughout the *AI Driven Development* course. It's deployed on **Vercel** through the GitHub integration and developed with a strict branch → PR → review → merge workflow.
 
 - **Repo:** `github.com/David-Khutsishvili/AIDD-course`
-- **Production URL:** _TBD after the first Vercel deploy_
+- **Production URL:** https://aidd-course.vercel.app (Vercel project `aidd-course` on the Hobby plan, account `david-khutsishvili`)
 - **Status:** Lecture 1, scaffolded with `create-next-app@16.4.6`.
-  - First Vercel deploy is in progress.
-  - Next up: a CI quality gate (GitHub Actions), then the first feature PR.
+  - Deployed to production on Vercel (still the default Next.js page).
+  - Next up: a CI quality gate (GitHub Actions + tests, plan Step 4.5), then the first feature PR (Step 5).
   - ⚠️ The `main` ruleset is **not active yet**, but follow the Git workflow below as if it were.
 - **Course plan and progress:** [`docs/plan1.md`](docs/plan1.md). Read its **Progress log** at the start of a session to see where things stand, and update it at the end of each session.
 - **Multiple PCs:** the project is worked on from two PCs. Everything that should carry over (plans, progress, decisions) must be committed to this repo. Files outside the repo don't sync. After pulling on either PC, run `npm ci`.
@@ -112,6 +112,7 @@ Ignored by git: `node_modules/`, `.next/`, `.env*`.
 | 2026-11-25 | Keep `AGENTS.md`, imported from `CLAUDE.md` | Makes AI agents use the version-matched Next.js docs, not outdated training data |
 | 2026-11-25 | Agent feedback (anonymized telemetry) off | Not needed; can be enabled with `experimental.agentFeedback` |
 | 2026-11-25 | Plans and progress live in the repo (`docs/`) | Work happens on two PCs, and files outside the repo don't sync |
+| 2026-11-25 | First production deploy started by hand (Vercel → Deployments → Create Deployment → `main`) | The import connected the repo but didn't build. Starting it from the dashboard avoids committing to `main` |
 | 2026-11-25 | Build a CI quality gate before the first feature PR | Every PR, including the Step 5 pipeline proof, gets checked automatically from the start |
 
 ## Ideas / backlog
